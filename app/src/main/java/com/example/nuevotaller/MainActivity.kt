@@ -1,7 +1,7 @@
 package com.example.nuevotaller
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import android.widget.Toast
@@ -12,8 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
+class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
 
     private lateinit var  binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
@@ -45,28 +44,28 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
             val call = api.getService()?.getNewByCategory("us", category, "4b94054dbc6b4b3b9e50d8f62cde4f6c")
             val news: NewResponse? = call?.body()
 
-            runOnUiThread {
-                if (call!!.isSuccessful) {
-                    if (news.status.equals("ok")){
-                        val articles = news?.articles ?: emptyList()
-                        articlesList.clear()
-                        articlesList.addAll(articles)
-                        adapter.notifyDataSetChanged()
-                    } else {
+            runOnUiThread
+            {
+                if (call!!.isSuccessful){
+                    if(news?.status.equals("ok")){
 
-                        showMessage("Error")
+
+                    }else{
+                        showMessage("Error en webservice")
                     }
+
+
+                    val article = news?.articles?:emptyList()
+                    articleList.clear()
+                    articleList.addAll(article)
+                    adapter.notifyDataSetChanged()
                 }else
                 {
-                    showMessage("error")
+                    showMessage("Error en el retrofit")
                 }
-
-                hideKeyBoard()
-
-
-            }
+                    hideKeyBoard()
+                }
         }
-
     }
 
     private fun hideKeyBoard() {
