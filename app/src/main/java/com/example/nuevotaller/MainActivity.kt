@@ -41,40 +41,35 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
 
         CoroutineScope(Dispatchers.IO).launch {
 
-            val call = api.getService()?.getNewByCategory("us", category, "4b94054dbc6b4b3b9e50d8f62cde4f6c")
+            val call = api.getService()?.getNewByCategory("us", category, "d598b7c8c5d14f5683d7a995500d8b3d")
             val news: NewResponse? = call?.body()
 
-            runOnUiThread
-            {
-                if (call!!.isSuccessful){
-                    if(news?.status.equals("ok")){
-
-
+            runOnUiThread{
+                if(call!!.isSuccessful){
+                    if (news?.status.equals("ok")){
+                        val articles = news?.articles ?: emptyList()
+                        articlesList.clear()
+                        articlesList.addAll(articles)
+                        adapter.notifyDataSetChanged()
                     }else{
                         showMessage("Error en webservice")
                     }
-
-
-                    val article = news?.articles?:emptyList()
-                    articleList.clear()
-                    articleList.addAll(article)
-                    adapter.notifyDataSetChanged()
-                }else
-                {
-                    showMessage("Error en el retrofit")
+                }else{
+                    showMessage("Error en retrofit")
                 }
-                    hideKeyBoard()
-                }
+            }
         }
+
     }
+
 
     private fun hideKeyBoard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
     }
 
-    private fun showMessage() {
-        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+    private fun showMessage(mensaje: String) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
