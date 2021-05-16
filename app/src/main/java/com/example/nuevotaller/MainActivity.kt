@@ -3,6 +3,7 @@ package com.example.nuevotaller
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.Toast
 import com.example.nuevotaller.databinding.ActivityMainBinding
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,16 +18,55 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var  binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
     private val articlesList = mutableListOf<Articles>()
+    private var pais: String = ""
+    private var categoria: String = ""
+
+    lateinit var btnMexico: Button
+    lateinit var btnArgentina: Button
+    lateinit var btnJapon: Button
+    lateinit var btnBelgica: Button
+    lateinit var btnVenezuela: Button
+    lateinit var btnItalia: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        btnMexico = findViewById(R.id.btnMexico)
+        btnArgentina = findViewById(R.id.btnArgentina)
+        btnJapon = findViewById(R.id.btnJapon)
+        btnBelgica = findViewById(R.id.btnBelgica)
+        btnVenezuela = findViewById(R.id.btnVenezuela)
+        btnItalia = findViewById(R.id.btnItalia)
+
         binding.searchNews.setOnQueryTextListener(this)
 
         initRecyclerView()
-        searchView("general")
+
+        btnMexico.setOnClickListener(){
+            searchView("mx","general")
+        }
+
+        btnArgentina.setOnClickListener(){
+            searchView("ar","general")
+        }
+
+        btnJapon.setOnClickListener(){
+            searchView("jp","general")
+        }
+
+        btnBelgica.setOnClickListener(){
+            searchView("be","general")
+        }
+
+        btnVenezuela.setOnClickListener(){
+            searchView("ve","general")
+        }
+
+        btnItalia.setOnClickListener(){
+            searchView("it","general")
+        }
     }
 
     private fun initRecyclerView() {
@@ -36,13 +76,16 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding.rvNews.adapter = adapter
     }
 
-    private fun searchView(category: String)
+    private fun searchView(country: String, category: String): String
     {
         val api = RetroFit2()
 
+        pais = country
+        categoria = category
+
         CoroutineScope(Dispatchers.IO).launch {
 
-            val call = api.getService()?.getNewByCategory("us", category, "d598b7c8c5d14f5683d7a995500d8b3d")
+            val call = api.getService()?.getNewByCategory(country, category, "d598b7c8c5d14f5683d7a995500d8b3d")
             val news: NewResponse? = call?.body()
 
             runOnUiThread{
@@ -60,7 +103,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
             }
         }
-
+        return country
     }
 
 
@@ -74,9 +117,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
+
+        var pais2: String = searchView(pais, categoria)
+
         if(!query.isNullOrEmpty())
         {
-            searchView(query.toLowerCase(Locale.ROOT))
+            searchView(pais2,query.toLowerCase(Locale.ROOT))
+
         }
 
         return true
