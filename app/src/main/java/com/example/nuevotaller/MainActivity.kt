@@ -3,16 +3,16 @@ package com.example.nuevotaller
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.inputmethod.InputMethodManager
-import android.widget.SearchView
 import android.widget.Toast
 import com.example.nuevotaller.databinding.ActivityMainBinding
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.appcompat.widget.SearchView
 import java.util.*
 
-class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private lateinit var  binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
@@ -22,10 +22,11 @@ class MainActivity : AppCompatActivity(), androidx.appcompat.widget.SearchView.O
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.searchNews.setOnQueryTextListener(this)
 
         initRecyclerView()
-        searchView("Business")
+        searchView("general")
     }
 
     private fun initRecyclerView() {
