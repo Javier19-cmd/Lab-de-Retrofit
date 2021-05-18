@@ -18,9 +18,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var  binding: ActivityMainBinding
     private lateinit var adapter: ArticleAdapter
     private val articlesList = mutableListOf<Articles>()
+    //Variables para el país y la categoría a seleccionar.
     private var pais: String = ""
     private var categoria: String = ""
 
+    //Variables para cada país a colocar en la app de noticias.
     lateinit var btnMexico: Button
     lateinit var btnArgentina: Button
     lateinit var btnJapon: Button
@@ -33,6 +35,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //Vinculano las variables con sus ids del archivo .xml
         btnMexico = findViewById(R.id.btnMexico)
         btnArgentina = findViewById(R.id.btnArgentina)
         btnJapon = findViewById(R.id.btnJapon)
@@ -44,26 +47,32 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         initRecyclerView()
 
+        //Buscando las noticias de México
         btnMexico.setOnClickListener(){
             searchView("mx","general")
         }
 
+        //Buscando las noticias de Argentina
         btnArgentina.setOnClickListener(){
             searchView("ar","general")
         }
 
+        //Buscando las noticias de Japón
         btnJapon.setOnClickListener(){
             searchView("jp","general")
         }
 
+        //Buscando las noticias de Bélgica
         btnBelgica.setOnClickListener(){
             searchView("be","general")
         }
 
+        //Buscando las noticias de Venezuela
         btnVenezuela.setOnClickListener(){
             searchView("ve","general")
         }
 
+        //Buscando las noticias de Italia
         btnItalia.setOnClickListener(){
             searchView("it","general")
         }
@@ -118,7 +127,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
 
-        var pais2: String = searchView(pais, categoria)
+        var pais2: String = searchView(pais, categoria) //Inicializando las variables pais y categoria con el método searchView.
 
         if(!query.isNullOrEmpty())
         {
